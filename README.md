@@ -11,7 +11,7 @@
 
 
 
-The Projection Upsampling Network (PU-Net) is a deep learning-based architecture inspired by the 3D U-Net framework, designed to reconstruct structured illumination microscopy (SIM) images from noisy, low signal-to-noise ratio (SNR) input data. In SIM, raw data typically comprise multiple images captured under varying illumination patterns. For instance, a two-beam SIM system may produce nine images (three angles × three phases), while a three-beam system can generate fifteen images (five angles × three phases).​
+The Projection Upsampling Network (PU-Net) is a deep learning-based architecture inspired by the 3D U-Net framework, designed to reconstruct structured illumination microscopy (SIM) images from noisy, low signal-to-noise ratio (SNR) input data. In SIM, raw data typically comprises multiple images captured under varying illumination patterns. For instance, a two-beam SIM system may produce nine images (three angles × three phases), while a three-beam system can generate fifteen images (five angles × three phases).​
 
 
 In our approach, these multi-channel SIM inputs are treated as a volumetric stack along the z-axis, effectively capturing the spatial and temporal variations inherent in the data. This representation enables PU-Net to learn the intricate spatiotemporal features necessary for accurate SIM reconstruction. By leveraging this strategy, PUNet effectively reconstructs high-fidelity SIM images from noisy, low-SNR datasets, offering a robust solution for enhancing image quality in challenging imaging conditions.​
@@ -35,8 +35,8 @@ Below is an example of a reconstructed SIM image using PU-Net:
 
 ## 🧾 Content
 - Dataset Generation
-- trainng example
-- prediciton example
+- training example
+- prediction example
 - ImageJ Scripts
 
 
@@ -48,7 +48,7 @@ You can install `projection_upsampling_network` via [pip]:
 
 
 
-To install latest development version :
+To install the latest development version :
 
     pip install git+https://github.com/ArghaSarker/projection_upsampling_network.git
 
@@ -61,7 +61,7 @@ Python 3.7 and above.
 ## 🛡 License
 
 Distributed under the terms of the [MIT] license,
-"projection_upsampling_network" is free and open source software
+"projection_upsampling_network" is free and open-source software
 
 ## 🐞 Issues
 
