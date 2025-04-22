@@ -1,0 +1,117 @@
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.WindowManager;
+import ij.io.FileSaver;
+import ij.process.FloatProcessor;
+import org.fairsim.fiji.DisplayWrapper;
+import org.fairsim.linalg.Vec2d;
+import org.fairsim.sim_algorithm.OtfProvider;
+import org.fairsim.sim_algorithm.SimAlgorithm;
+import org.fairsim.sim_algorithm.SimParam;
+import org.fairsim.sim_algorithm.SimUtils;
+import org.fairsim.utils.ImageDisplay;
+
+// ---- Reconstruction Parameters ----
+int nrBands = 2;       // SIM bands
+int nrAng = 3;         // Number of directions (angles)
+int nrPha = 3;         // Number of phases
+int imgSize = 502;     // Expected width & height of image (pixels)
+double pxlSize = 0.0626;  // Pixel size (micron)
+double emWavelen = 488;   // Emission wavelength (nm)
+double otfNA = 1.3;       // Numerical Aperture for OTF
+double otfCorr = 0.08;    // OTF compensation value
+double background = 0.00; // Background subtraction value
+int fitBand = 1;          // Band used for parameter fitting
+int visualFeedback = -1;  // Off for batch processing
+boolean coarsePeakFit = true;
+double fitExclude = 0.9;
+boolean otfBeforeShift = true;
+
+// ---- File Path ----
+String filePath =  "C:\\Users\\ASARKER\\Desktop\\code_change\\batch_test_data\\batch\\37_input_image.tif";
+IJ.log("Opening file: " + filePath);
+ImagePlus imp = IJ.openImage(filePath);
+if(imp == null) {
+    IJ.log("Failed to open image.");
+    return;
+}
+
+// ---- Verify Stack Size & Dimensions ----
+ImageStack stack = imp.getStack();
+if(stack.getSize() != nrAng * nrPha) {
+    IJ.log("Stack size (" + stack.getSize() + ") does not match expected " + (nrAng * nrPha) + " slices.");
+    return;
+}
+int width = stack.getWidth();
+int height = stack.getHeight();
+if(width != imgSize || height != imgSize) {
+    IJ.log("Expected image size " + imgSize + "x" + imgSize + ", but got " + width + "x" + height);
+    return;
+}
+
+// ---- Process Raw Data: Copy, Background Subtraction, Windowing, FFT ----
+Vec2d.Cplx[][] rawImages = new Vec2d.Cplx[nrAng][nrPha];
+for (int a = 0; a < nrAng; a++) {
+    for (int p = 0; p < nrPha; p++) {
+        short[] pixels = (short[]) stack.getProcessor(a * nrPha + p + 1)
+                .convertToShortProcessor().getPixels();
+        rawImages[a][p] = Vec2d.createCplx(imgSize, imgSize);
+        rawImages[a][p].setFrom16bitPixels(pixels);
+        double pc = SimUtils.subtractBackground(rawImages[a][p], background);
+        SimUtils.fadeBorderCos(rawImages[a][p], 15);
+        rawImages[a][p].fft2d(false);
+        IJ.log("-fs- Processed slice (dir " + a + ", phase " + p + "), clipped: " + (pc * 100) + "%");
+    }
+}
+
+// ---- Setup OTF and SIM Parameters ----
+OtfProvider otf = OtfProvider.fromEstimate(otfNA, emWavelen, otfCorr);
+SimParam simParam = SimParam.create(nrBands, nrAng, nrPha, imgSize, pxlSize, otf);
+
+// ---- Parameter Estimation ----
+if (coarsePeakFit) {
+    SimAlgorithm.estimateParameters(simParam, rawImages, fitBand, fitExclude, DisplayWrapper.getFactory(), visualFeedback, null);
+} else {
+    // Set manual initial guesses if not using coarse peak fit
+    simParam.dir(0).setPxPy(137.44, -140.91);
+    simParam.dir(1).setPxPy(-52.8, -189.5);
+    simParam.dir(2).setPxPy(190.08, 49.96);
+    SimAlgorithm.estimateParameters(simParam, rawImages, fitBand, -1, DisplayWrapper.getFactory(), visualFeedback, null);
+}
+
+// ---- Set Reconstruction Parameters ----
+simParam.setWienerFilter(0.02);
+simParam.setApoCutoff(2.0);
+simParam.setApoBend(0.6);
+otf.setAttenuation(0.98, 1.4);
+otf.switchAttenuation(true);
+
+// ---- Run the SIM Reconstruction ----
+// This call displays two output windows.
+Vec2d.Real result = SimAlgorithm.runReconstruction(simParam, rawImages, DisplayWrapper.getFactory(), -1,
+        otfBeforeShift, SimParam.CLIPSCALE.CLIP, null);
+
+// ---- Wait for Windows to Appear ----
+IJ.wait(500);
+
+// ---- Retrieve the "Spatial images" Window ----
+ImagePlus spatialImp = WindowManager.getImage("Spatial images");
+if (spatialImp == null) {
+    IJ.log("'Spatial images' window not found; using vector result.");
+    float[] res = result.vectorData();
+    FloatProcessor fp = new FloatProcessor(imgSize, imgSize, res);
+    spatialImp = new ImagePlus("Spatial images", fp);
+}
+
+// ---- Save the "Spatial images" Output ----
+String outputPath = filePath.replace(".tiff", "_SIM_Reconstruction.tiff");
+if (new FileSaver(spatialImp).saveAsTiff(outputPath)) {
+    IJ.log("Saved SIM reconstruction to: " + outputPath);
+} else {
+    IJ.log("Failed to save SIM reconstruction to: " + outputPath);
+}
+
+// ---- Clean Up ----
+imp.close();
+spatialImp.close();
