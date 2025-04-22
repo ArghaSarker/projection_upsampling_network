@@ -20,7 +20,11 @@ In our approach, these multi-channel SIM inputs are treated as a volumetric stac
 
 Below is an example of a reconstructed SIM image using PU-Net:
 
-![Reconstructed SIM Image](images/Pu-Net_github_example_ss.jpeg)
+<div align="center">
+    <img src="./Imges/PU-Net_github_example.png" alt="Reconstructed SIM Image">
+</div>
+
+<!-- [View PDF](images/PU-Net_github_example.pdf) -->
 
 
 
@@ -48,7 +52,8 @@ To install latest development version :
 
     pip install git+https://github.com/ArghaSarker/projection_upsampling_network.git
 
-
+## Requirement
+Python 3.7 and above.
 
 
 
