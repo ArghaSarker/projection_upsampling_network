@@ -6,12 +6,20 @@
 [![tests](https://github.com/ArghaSarker/projection_upsampling_network/workflows/tests/badge.svg)](https://github.com/ArghaSarker/projection_upsampling_network/actions)
 [![codecov](https://codecov.io/gh/ArghaSarker/projection_upsampling_network/branch/main/graph/badge.svg)](https://codecov.io/gh/ArghaSarker/projection_upsampling_network)
 
+## Introduction
 
-pakage for projection upsampling network
+Projection Upsampling Network is a deep learning-based architecture designed to enhance image resolution by effectively upsampling low-SNR inputs. It employs a Upsampling and Projection mechanism that aids in reconstructing fine details and textures, making it particularly suited for SIM reconstruction from noisy input image. Detailed examples included in this repository illustrate the process from dataset generation, through model training, to prediction, ensuring a simple and accessible entry point for users.
 
-----------------------------------
+
+
+
 
 This [caped] package was generated with [Cookiecutter] using [@caped]'s [cookiecutter-template] template.
+
+## Content
+- Dataset Generation
+- trainng example
+- prediciton example
 
 
 
@@ -28,10 +36,9 @@ To install latest development version :
     pip install git+https://github.com/ArghaSarker/projection_upsampling_network.git
 
 
-## Contributing
 
-Contributions are very welcome. Tests can be run with [tox], please ensure
-the coverage at least stays the same before you submit a pull request.
+
+
 
 ## License
 
@@ -61,4 +68,27 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 [tox]: https://tox.readthedocs.io/en/latest/
 [pip]: https://pypi.org/project/pip/
 [PyPI]: https://pypi.org/
+
+
+
+
+
+## Acknowledgement
+
+
+## 📚 References
+Weigert et al. (2018)
+Weigert, M., Schmidt, U., Boothe, T., Müller, A., Dibrov, A., Jain, A., Wilhelm, B., Schmidt, D., Broaddus, C., Culley, S., Rocha-Martins, M., Segovia-Miranda, F., Norden, C., Henriques, R., Zerial, M., Solimena, M., Rink, J., Tomancak, P., Royer, L., Jug, F., & Myers, E. W. (2018). Content-aware image restoration: pushing the limits of fluorescence microscopy. Nature Methods, 15(12), 1090–1097. https://doi.org/10.1038/s41592-018-0216-7
+
+Qiao & Li (2022)
+Qiao, C., & Li, D. (2022). BioSR: a biological image dataset for super-resolution microscopy. figshare. https://doi.org/10.6084/m9.figshare.13264793.v8
+
+
+
+
+
+
+
+
+
 # projection_upsampling_network
