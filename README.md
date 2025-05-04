@@ -75,7 +75,7 @@ If you encounter any bugs or have suggestions for improvements, please open an i
 
 
 
-A huge thanks to [Dr. rer. nat. Varun Kapoor](https://github.com/kapoorlab) for his unwavering support and expert guidance that has been pivotal in shaping this project.
+A huge thanks to [Dr. rer. nat. Varun Kapoor](https://github.com/kapoorlab) for his unwavering support and expert guidance that has been pivotal in shaping this codebase.
 
 
 ## 📚 References
