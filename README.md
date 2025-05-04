@@ -89,6 +89,11 @@ Qiao, C., & Li, D. (2022). BioSR: a biological image dataset for super-resolutio
 "Open-source image reconstruction of super-resolution structured illumination microscopy data in ImageJ",
 Nature Communications, doi: 10.1038/ncomms10980
 
+4. ArghaSarker, no date b. GitHub - ArghaSarker/RDL_denoising: Denoising Microscopy images with prior knowledge of Morier Patterns., GitHub. (online: https://github.com/ArghaSarker/RDL_denoising).
+5. Marcel Müller, Viola Mönkemöller, Simon Hennig, Wolfgang Hübner, Thomas Huser (2016).
+"Open-source image reconstruction of super-resolution structured illumination microscopy data in ImageJ",
+Nature Communications, doi: 10.1038/ncomms10980
+
 
 
 
